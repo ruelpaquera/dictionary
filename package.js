@@ -1,5 +1,5 @@
 Package.describe({
-  name: "raix:dictionary",
+  name: "dictionary",
   version: "0.0.0",
   summary: "Adds a simple value based dictionary"
 });
@@ -12,7 +12,7 @@ Package.on_use(function (api) {
 });
 
 Package.on_test(function (api) {
-  api.use('raix:dictionary', ['client', 'server']);
+  api.use('dictionary', ['client', 'server']);
   api.use('test-helpers', 'client');
   api.use(['tinytest', 'underscore', 'ejson']);
 
