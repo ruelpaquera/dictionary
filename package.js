@@ -1,6 +1,6 @@
 Package.describe({
   name: "ground:dictionary",
-  version: "0.0.0",
+  version: "0.0.1",
   summary: "Adds a simple value based dictionary"
 });
 
