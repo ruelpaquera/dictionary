@@ -5,16 +5,20 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
+
   api.versionsFrom && api.versionsFrom('METEOR@0.9.1');
 
-  // TODO: remove underscore deps _.each (used once)
   api.export('Dictionary');
 
   api.add_files('dictionary.js', ['client', 'server']);
 });
 
 Package.on_test(function (api) {
-  api.use('ground:dictionary', ['client', 'server']);
+  if (api.versionsFrom) {
+    api.use('ground:dictionary', ['client', 'server']);
+  } else {
+    api.use('dictionary', ['client', 'server']);
+  }
   api.use('test-helpers', 'client');
   api.use(['tinytest', 'underscore', 'ejson']);
 
