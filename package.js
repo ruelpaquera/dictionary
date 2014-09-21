@@ -1,7 +1,8 @@
 Package.describe({
   name: "ground:dictionary",
   version: "0.0.1",
-  summary: "Adds a simple value based dictionary"
+  summary: "Adds a simple value based dictionary",
+  git: "https://github.com/GroundMeteor/dictionary.git"
 });
 
 Package.on_use(function (api) {
