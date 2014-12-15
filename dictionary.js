@@ -93,10 +93,10 @@ Dictionary.prototype.clone = function() {
   return _splice(this.list);
 };
 
-Dictionary.prototype.getArray = function() {
+Dictionary.prototype.toArray = function() {
   return this.list;
 };
 
-Dictionary.prototype.getLookup = function() {
+Dictionary.prototype.toObject = function() {
   return this.lookup;
 };
