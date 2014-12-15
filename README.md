@@ -1,83 +1,34 @@
-Minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
+ground:dictionary [![Build Status](https://travis-ci.org/GroundMeteor/dictionary.png?branch=master)](https://travis-ci.org/GroundMeteor/dictionary)
 ===============
 
-This is a small package that adds:
-* `MiniMax.minify` Compress object to array structure
-* `MiniMax.maxify` Decompress to object
-* `MiniMax.stringify` ~ Like a compressed version of `EJSON.stringify`
-* `MiniMax.parse` ~ Like the decomressing version of `EJSON.parse`
+This is a small package that adds scope `Dictionary`
+* add(value) *Adds a word to the dictionary returns index*
+* addList(listArray) *Adds an array of words to the dictionary*
+* set(list) *Sets the dictionary to a list of words*
+* withoutInitial *Returns list of words except those added at creation eg. `var d = new Dictionary('foo', 'bar');` foo+bar will not be returned*
+* value(index) *get value at index*
+* index(value) *get index for value*
+* exists(value) *returns true if value exists in dictionary*
+* clone *clones the list and returns the list of words*
+* toArray *returns the list of words in the dictionary*
+* toObject *returns the word lookup object*
 
-##Usage
+## Usage
 In short:
-Schema and schema less documents are minified to an array format:
-  1. Array of keywords
-  2. Array of data schemas
-  3. Array of data
-
-##How does it work? (example)
-
-Our data object:
 ```js
-var data = {
-  "5qSjMxCjkNF2SFBy6": {
-  _id: "5qSjMxCjkNF2SFBy6",
-  foo: "test"
-},
-  "rbieX9SbdGgfSWCd7": {
-  _id: "rbieX9SbdGgfSWCd7",
-  foo: "test",
-  bar: "okay"
-}
-};
+  var d = new Dictionary('foo', 'bar');
+  d.add('hello');
+  d.withoutInitial(); // returns ['hello']
+  d.value(0); // return 'foo'
+  d.index('bar'); // return 1
+  d.exists('foo'); // return true
+  d.exists('FOO');  // return false
+  d.clone(); // return cloned word list ['foo', 'bar', 'hello']
+  d.toArray(); // return the word list ['foo', 'bar', 'hello']
+  d.toObject(); // return { 'foo': 0, 'bar': 1, 'hello': 2 }
 ```
 
-In EJSON.stringify = 136 chars
-```js
-{"5qSjMxCjkNF2SFBy6":{"_id":"5qSjMxCjkNF2SFBy6","foo":"test"},
-"rbieX9SbdGgfSWCd7":{"_id":"rbieX9SbdGgfSWCd7","foo":"test",
-"bar":"okay"}} 
-```
 
-In EJSON.minify = 117 chars saved 14% space
-```js
-[["5qSjMxCjkNF2SFBy6","_id","foo","rbieX9SbdGgfSWCd7","bar"], // Keywords
-[0,[-1,2,4],[0,3]], // Schema
-[2,[1,0,"test"],[1,3,"test","okay"]]] // Data
-```
+## Where is this used?
+This is part of the MiniMax package where MiniMax uses a dictionary to compress data.
 
-The data array it self in this example is only about 36 chars ~ 27% of the original EJSON.stringify - if both server and client have keywords and the schema only the data would have to be sent.
-
-```js
-[2,[1,0,"test"],[1,3,"test","okay"]] 
-```
-
-```js
-  Keywords:
-  [["5qSjMxCjkNF2SFBy6","_id","foo","rbieX9SbdGgfSWCd7","bar"],
-  Schemas:
-  [0,[-1,2,4],[0,3]],
-  data:
-  [2,[1,0,"test"],[1,3,"test","okay"]]] 
-```
-
-The keyword array contains key names
-```js
-  [1,0,"test"]
-  The "1" referes to the object schema [-1,2,4] - if pointing to
-  schema 0 then the data is an array.
-  {0, "test"}
-  In the schema the "-1", the minus says that the value is a
-  keyword reference and the 1 points to the keyword "_id"
-  In the schema the "2" points to keyword "foo" and use the value
-  in the data.
-  The "4" in the schema isnt used - this is an extension of the
-  schema to match the "bar" in the other object.
-  [-1,2,4] -> [_id, foo, bar_]
-  [-1,+2,+4] -> [0 = "5qSjMxCjkNF2SFBy6", "test"]
-  -> {_id: "5qSjMxCjkNF2SFBy6", foo: "test"_}
-
-```
-
-##Future
-* Faster code
-* Better compression
