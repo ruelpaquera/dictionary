@@ -39,10 +39,10 @@ Dictionary.prototype.add = function(value) {
   if (!self.exists(value)) {
     // Add value to keyword list
     // We return the index - note this can be 0 :)
-    return this.lookup[''+value] = this.list.push(value) -1;
+    return this.lookup[value] = this.list.push(value) -1;
   }
 
-  return this.lookup[''+value];
+  return this.lookup[value];
 };
 
 Dictionary.prototype.addList = function(list) {
@@ -82,7 +82,7 @@ Dictionary.prototype.value = function(index) {
 };
 
 Dictionary.prototype.index = function(value) {
-  return this.lookup[''+value];
+  return this.lookup[value];
 };
 
 Dictionary.prototype.exists = function(value) {
