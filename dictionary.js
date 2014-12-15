@@ -1,20 +1,36 @@
+var _splice = function(array, begin) {
+  var result = [];
+
+  begin = begin || 0;
+
+  // Add the ones we need
+  for (var i = begin; i < array.length; i++)
+    result.push(array[i]);
+
+  return result;
+};
+
 Dictionary = function(list) {
   var self = this;
   // Dictionary
   self.lookup = {};
   self.list = [];
 
+  self.initial = [];
+
   // If user sets a list
   if (list instanceof Dictionary) {
+    // Clone the initial list
+    self.initial = list.clone();
     // We set the clone
     self.set(list.clone());
   } else if (list) {
+    // Clone the array
+    self.initial = _splice(list);
     // Just set the list
     self.set(list);
   }
 
-  if (list)
-    self.initialLength = list.length;
 };
 
 Dictionary.prototype.add = function(value) {
@@ -58,7 +74,7 @@ Dictionary.prototype.remove = function(value) {
 };
 
 Dictionary.prototype.withoutInitial = function() {
-  return this.list.slice(this.initialLength || 0);
+  return _splice(this.list, this.initial.length);
 };
 
 Dictionary.prototype.value = function(index) {
@@ -74,7 +90,7 @@ Dictionary.prototype.exists = function(value) {
 };
 
 Dictionary.prototype.clone = function() {
-  return this.list.slice(0);
+  return _splice(this.list);
 };
 
 Dictionary.prototype.getArray = function() {
