@@ -10,8 +10,8 @@ This is a small package that adds scope `Dictionary`
 * index(value) *get index for value*
 * exists(value) *returns true if value exists in dictionary*
 * clone *clones the list and returns the list of words*
-* getArray *returns the list of words in the dictionary*
-* getLookup *returns the word lookup object*
+* toArray *returns the list of words in the dictionary*
+* toObject *returns the word lookup object*
 
 ## Usage
 In short:
@@ -24,8 +24,8 @@ In short:
   d.exists('foo'); // return true
   d.exists('FOO');  // return false
   d.clone(); // return cloned word list ['foo', 'bar', 'hello']
-  d.getArray(); // return the word list ['foo', 'bar', 'hello']
-  d.getLookup(); // return { 'foo': 0, 'bar': 1, 'hello': 2 }
+  d.toArray(); // return the word list ['foo', 'bar', 'hello']
+  d.toObject(); // return { 'foo': 0, 'bar': 1, 'hello': 2 }
 ```
 
 
