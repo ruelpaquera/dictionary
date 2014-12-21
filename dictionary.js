@@ -42,7 +42,12 @@ Dictionary.prototype.add = function(value) {
     // Add value to keyword list
     // We return the index - note this can be 0 :)
     if (value instanceof Date) {
-      this.lookupDate[+value] = this.list.push(new Date(value)) -1;
+      var index = this.list.push(value) - 1;
+      // Set the normal lookup
+      this.lookup[value] = index;
+      // Set the value in the date lookup in order not to conflict with number
+      // lookups
+      this.lookupDate[+value] = index;
     } else {
       this.lookup[value] = this.list.push(value) -1;
     }
