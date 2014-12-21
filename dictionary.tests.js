@@ -43,7 +43,7 @@ Tinytest.add('Dictionary - test types', function(test) {
 
   test.isTrue((dict.value(n) - d == 0), 'Should be same date');
 
-  test.isTrue((dict.value(n) !== d), 'Should be a cloned date');
+  test.isTrue((dict.value(n) === d), 'Should not be a cloned date');
 
 });
 
