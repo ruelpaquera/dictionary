@@ -14,7 +14,7 @@ Dictionary = function(list) {
   var self = this;
   // Dictionary
   self.lookup = {};
-  self.lookupDate = {};
+  self.lookupDate = {}; // Special lookup making sure date lookups are acurate
 
   self.list = [];
 
@@ -93,6 +93,9 @@ Dictionary.prototype.value = function(index) {
 };
 
 Dictionary.prototype.index = function(value) {
+  // We have to use the Date lookup in order to get the correct lookup value
+  // otherwise there are some slight diviation in the result - We want this
+  // 100% accurate
   if (value instanceof Date) {
     return this.lookupDate[+value];
   } else {
