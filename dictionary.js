@@ -85,11 +85,7 @@ Dictionary.prototype.withoutInitial = function() {
 };
 
 Dictionary.prototype.value = function(index) {
-  if (this.list[index] instanceof Date) {
-    return new Date(this.list[index]);
-  } else {
-    return this.list[index];
-  }
+  return this.list[index];
 };
 
 Dictionary.prototype.index = function(value) {
