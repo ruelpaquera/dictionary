@@ -14,6 +14,8 @@ Dictionary = function(list) {
   var self = this;
   // Dictionary
   self.lookup = {};
+  self.lookupDate = {};
+
   self.list = [];
 
   self.initial = [];
@@ -39,10 +41,14 @@ Dictionary.prototype.add = function(value) {
   if (!self.exists(value)) {
     // Add value to keyword list
     // We return the index - note this can be 0 :)
-    return this.lookup[value] = this.list.push(value) -1;
+    if (value instanceof Date) {
+      this.lookupDate[+value] = this.list.push(new Date(value)) -1;
+    } else {
+      this.lookup[value] = this.list.push(value) -1;
+    }
   }
 
-  return this.lookup[value];
+  return this.index(value);
 };
 
 Dictionary.prototype.addList = function(list) {
@@ -55,6 +61,7 @@ Dictionary.prototype.addList = function(list) {
 Dictionary.prototype.set = function(list) {
   // Reset the this.lookup
   this.lookup = {};
+  this.lookupDate = {};
   this.list = [];
   // Add the list
   this.addList(list);
@@ -78,11 +85,19 @@ Dictionary.prototype.withoutInitial = function() {
 };
 
 Dictionary.prototype.value = function(index) {
-  return this.list[index];
+  if (this.list[index] instanceof Date) {
+    return new Date(this.list[index]);
+  } else {
+    return this.list[index];
+  }
 };
 
 Dictionary.prototype.index = function(value) {
-  return this.lookup[value];
+  if (value instanceof Date) {
+    return this.lookupDate[+value];
+  } else {
+    return this.lookup[value];
+  }
 };
 
 Dictionary.prototype.exists = function(value) {

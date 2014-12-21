@@ -33,6 +33,18 @@ Tinytest.add('Dictionary - test types', function(test) {
   test.isTrue((dict.value(1)  === true), 'Should be true...');
   test.isTrue((dict.value(2)  === null), 'Should be null...');
 
+  var d = new Date();
+
+  var n = dict.add(d);
+
+  test.isTrue(dict.exists(d));
+
+  test.instanceOf(dict.value(n), Date, 'Should be instance of Date');
+
+  test.isTrue((dict.value(n) - d == 0), 'Should be same date');
+
+  test.isTrue((dict.value(n) !== d), 'Should be a cloned date');
+
 });
 
 //Test API:
