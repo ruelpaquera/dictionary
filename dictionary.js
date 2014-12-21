@@ -14,6 +14,8 @@ Dictionary = function(list) {
   var self = this;
   // Dictionary
   self.lookup = {};
+  self.lookupDate = {}; // Special lookup making sure date lookups are acurate
+
   self.list = [];
 
   self.initial = [];
@@ -39,10 +41,19 @@ Dictionary.prototype.add = function(value) {
   if (!self.exists(value)) {
     // Add value to keyword list
     // We return the index - note this can be 0 :)
-    return this.lookup[value] = this.list.push(value) -1;
+    if (value instanceof Date) {
+      var index = this.list.push(value) - 1;
+      // Set the normal lookup
+      this.lookup[value] = index;
+      // Set the value in the date lookup in order not to conflict with number
+      // lookups
+      this.lookupDate[+value] = index;
+    } else {
+      this.lookup[value] = this.list.push(value) -1;
+    }
   }
 
-  return this.lookup[value];
+  return this.index(value);
 };
 
 Dictionary.prototype.addList = function(list) {
@@ -55,6 +66,7 @@ Dictionary.prototype.addList = function(list) {
 Dictionary.prototype.set = function(list) {
   // Reset the this.lookup
   this.lookup = {};
+  this.lookupDate = {};
   this.list = [];
   // Add the list
   this.addList(list);
@@ -82,7 +94,14 @@ Dictionary.prototype.value = function(index) {
 };
 
 Dictionary.prototype.index = function(value) {
-  return this.lookup[value];
+  // We have to use the Date lookup in order to get the correct lookup value
+  // otherwise there are some slight diviation in the result - We want this
+  // 100% accurate
+  if (value instanceof Date) {
+    return this.lookupDate[+value];
+  } else {
+    return this.lookup[value];
+  }
 };
 
 Dictionary.prototype.exists = function(value) {
