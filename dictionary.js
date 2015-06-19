@@ -13,8 +13,10 @@ var _splice = function(array, begin) {
 Dictionary = function(list) {
   var self = this;
   // Dictionary
-  self.lookup = {};
+  self.lookupString = {};
+  self.lookupNumber = {};
   self.lookupDate = {}; // Special lookup making sure date lookups are acurate
+  self.lookupBoolean = {};
 
   self.list = [];
 
@@ -35,22 +37,37 @@ Dictionary = function(list) {
 
 };
 
+Dictionary.prototype.lookup = function(key) {
+  var self = this;
+
+  var lookup = self.lookupString;
+
+  if (key instanceof Date) {
+    lookup = self.lookupDate;
+    key = +key;
+  } else if (key === +key) {
+    lookup = self.lookupNumber;
+  } else if (key === !!key) {
+    lookup = self.lookupBoolean;
+  }
+
+  if (arguments.length === 2) {
+    // Setter
+    lookup[key] = arguments[1];
+  }
+
+  return lookup[key];
+};
+
 Dictionary.prototype.add = function(value) {
   var self = this;
   // Make sure not to add existing values / words
   if (!self.exists(value)) {
     // Add value to keyword list
     // We return the index - note this can be 0 :)
-    if (value instanceof Date) {
-      var index = this.list.push(value) - 1;
-      // Set the normal lookup
-      this.lookup[value] = index;
-      // Set the value in the date lookup in order not to conflict with number
-      // lookups
-      this.lookupDate[+value] = index;
-    } else {
-      this.lookup[value] = this.list.push(value) -1;
-    }
+    var index = this.list.push(value) - 1;
+    // Set the normal lookup
+    this.lookup(value, index);
   }
 
   return this.index(value);
@@ -65,7 +82,9 @@ Dictionary.prototype.addList = function(list) {
 
 Dictionary.prototype.set = function(list) {
   // Reset the this.lookup
-  this.lookup = {};
+  this.lookupString = {};
+  this.lookupNumber = {};
+  this.lookupBoolean = {};
   this.lookupDate = {};
   this.list = [];
   // Add the list
@@ -97,11 +116,7 @@ Dictionary.prototype.index = function(value) {
   // We have to use the Date lookup in order to get the correct lookup value
   // otherwise there are some slight diviation in the result - We want this
   // 100% accurate
-  if (value instanceof Date) {
-    return this.lookupDate[+value];
-  } else {
-    return this.lookup[value];
-  }
+  return this.lookup(value);
 };
 
 Dictionary.prototype.exists = function(value) {
@@ -117,5 +132,5 @@ Dictionary.prototype.toArray = function() {
 };
 
 Dictionary.prototype.toObject = function() {
-  return this.lookup;
+  return _.extend({}, this.lookupString, this.lookupNumber, this.lookupDate, this.lookupBoolean);
 };
