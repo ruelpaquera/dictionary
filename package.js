@@ -7,7 +7,7 @@ Package.describe({
 
 Package.onUse(function (api) {
 
-  api.versionsFrom('1.0');
+  // api.versionsFrom('1.0');
 
   api.export('Dictionary');
 
@@ -19,6 +19,6 @@ Package.onTest(function (api) {
   api.use('test-helpers', 'client');
   api.use(['tinytest', 'underscore', 'ejson']);
 
-  api.add_files('dictionary.tests.js', ['client', 'server']);
+  // api.add_files('dictionary.tests.js', ['client', 'server']);
 
 });
